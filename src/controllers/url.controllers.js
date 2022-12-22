@@ -16,13 +16,17 @@ export async function postUrl(req, res) {
    }
 }
 
-export async function getUrlById (req, res){
-   const  id  = req.params;
+export async function getUrlById(req, res) {
+   const id = req.params;
 
    try {
       const urlById = await connectionDB.query("SELECT * FROM links WHERE id=$1;", [id.id]);
-      
-      const obj ={
+
+      if (!urlById.rows[0]) {
+         return res.sendStatus(404);
+      }
+
+      const obj = {
          id: urlById.rows[0].id,
          shortUrl: urlById.rows[0].shortUrl,
          url: urlById.rows[0].url
@@ -34,3 +38,24 @@ export async function getUrlById (req, res){
    }
 
 }
+
+export async function getShortenUrl(req, res) {
+   const { shortUrl } = req.params;
+
+   try {
+      const shortUrlInDb = await connectionDB.query(`SELECT * FROM links WHERE "shortUrl"=$1;`, [shortUrl]);
+
+      if(!shortUrlInDb.rows[0]){
+         return res.sendStatus(404);
+      }
+
+      await connectionDB.query(`UPDATE links SET "visitCount"=$1 WHERE id=$2;`, [shortUrlInDb.rows[0].visitCount + 1, shortUrlInDb.rows[0].id]);
+
+      res.redirect(shortUrlInDb.rows[0].url);
+   } catch (err) {
+      return res.status(500).send(err.message);
+   }
+
+}
+
+// export async function
