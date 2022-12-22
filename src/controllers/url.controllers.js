@@ -45,7 +45,7 @@ export async function getShortenUrl(req, res) {
    try {
       const shortUrlInDb = await connectionDB.query(`SELECT * FROM links WHERE "shortUrl"=$1;`, [shortUrl]);
 
-      if(!shortUrlInDb.rows[0]){
+      if (!shortUrlInDb.rows[0]) {
          return res.sendStatus(404);
       }
 
@@ -58,4 +58,14 @@ export async function getShortenUrl(req, res) {
 
 }
 
-// export async function
+export async function deleteUrl(req, res) {
+   const  id  = res.locals.id;
+   console.log(id)
+   try {
+      await connectionDB.query(`DELETE FROM links WHERE id=$1 ;`, [id]);
+      console.log("excluido")
+      res.status(204).send("excluido");
+   } catch (err) {
+      return res.status(500).send(err.message);
+   }
+}
