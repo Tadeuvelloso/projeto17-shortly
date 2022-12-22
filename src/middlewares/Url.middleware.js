@@ -12,7 +12,8 @@ export async function checkUrl(req, res, next) {
         res.status(401).send("missing token")
         return
     };
-
+    
+    
     if (!url) {
         return res.sendStatus(400);
     }
@@ -25,13 +26,14 @@ export async function checkUrl(req, res, next) {
     }
 
     try {
-        const tokenValidation = connectionDB.query("SELECT * FROM  sessions WHERE token=$1;", [token]);
-
+        const tokenValidation = await connectionDB.query("SELECT * FROM  sessions WHERE token=$1;", [token]);
+        console.log(tokenValidation.rows[0])
         if (!tokenValidation.rows[0]) {
             return res.sendStatus(401);
         }
+        
         res.locals.url = url;
-        res.locals.userId = tokenValidation.row[0].userId
+        res.locals.userId = tokenValidation.rows[0].userId
         next();
 
     } catch (err) {
