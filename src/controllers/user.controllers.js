@@ -2,7 +2,6 @@ import { connectionDB } from "../database/db.js";
 
 export async function getAllUrlsFromUser(req, res) {
     const user = res.locals.user;
-    
 
     try {
         const allUrls = await connectionDB.query(`SELECT * FROM links WHERE "userId"=$1;`, [user.id]);
