@@ -24,6 +24,7 @@ CREATE TABLE sessions (
 CREATE TABLE ranking (
 	id SERIAL PRIMARY KEY,
 	"userId" INTEGER NOT NULL REFERENCES "users"("id"),
+	name TEXT NOT NULL,
 	"linksCount" INTEGER NOT NULL,
 	"allVisitCount" INTEGER NOT NULL
 );

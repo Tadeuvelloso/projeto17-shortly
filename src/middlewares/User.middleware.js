@@ -17,7 +17,6 @@ export async function checkUserData(req, res, next){
             return res.sendStatus(401);
         }
 
-        console.log("passamos pelo middleware!")
         res.locals.user = userRequest.rows[0];
         next();
 

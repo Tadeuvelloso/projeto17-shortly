@@ -6,5 +6,4 @@ const router = Router();
 
 router.get("/users/me", checkUserData, getAllUrlsFromUser);
 
-
 export default router;

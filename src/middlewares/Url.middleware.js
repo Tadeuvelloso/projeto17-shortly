@@ -27,7 +27,6 @@ export async function checkUrl(req, res, next) {
 
     try {
         const tokenValidation = await connectionDB.query("SELECT * FROM  sessions WHERE token=$1;", [token]);
-        console.log(tokenValidation.rows[0])
         if (!tokenValidation.rows[0]) {
             return res.sendStatus(401);
         }
@@ -63,8 +62,8 @@ export async function checkUrlInDb(req, res, next) {
         if (checkIdUrlInDb.rows[0].userId !== userRequest.rows[0].userId) {
             return res.sendStatus(401);
         }
-        console.log("passamos pelo middleware!")
         res.locals.id = id;
+        res.locals.userId = userRequest.rows[0].userId;
         next();
 
     } catch (err) {

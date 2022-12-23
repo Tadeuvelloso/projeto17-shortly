@@ -62,7 +62,6 @@ export async function checkBodySignInObj (req, res, next){
         const passwordValidation = bcrypt.compareSync(auth.password, userData.rows[0].password);
 
         if (!passwordValidation) {
-            console.log("senha errada!");
             return res.sendStatus(401);
         }
 
@@ -71,7 +70,6 @@ export async function checkBodySignInObj (req, res, next){
         res.locals.userId = userData.rows[0].id;
         next();
     } catch (err) {
-        console.log("aqui")
         return res.status(500).send(err.message);
     }
 
